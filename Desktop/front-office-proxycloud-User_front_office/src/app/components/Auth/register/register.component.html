@@ -1,0 +1,169 @@
+<section class="bg-gray-50 dark:bg-gray-900">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 grid lg:grid-cols-2 gap-8 lg:gap-16">
+        <div class="flex flex-col justify-center">
+            <img src="../../../../assets/images/User/register.gif" alt="Description of Image" class="mb-2 mx-auto w-32 h-auto rounded-lg">
+            <h1 class="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+                Create your account
+            </h1>
+            <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
+                Join WorkMate to experience our services. Complete the form below to sign up.
+            </p>
+        </div>
+        <div>
+            <section class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+                <div class="w-full max-w-2xl p-8 bg-white rounded-xl shadow-lg dark:bg-gray-800">
+                    <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
+                        Create an Account
+                    </h2>
+
+                    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+                                    <!-- Username -->
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 dark:text-white">Username</label>
+                <input type="text" id="username" formControlName="username" placeholder="Choose a username" class="input-field" />
+                <div *ngIf="registerForm.get('username')?.touched && registerForm.get('username')?.invalid" class="text-red-500 text-sm mt-1">
+                  <div *ngIf="registerForm.get('username')?.errors?.['required']">This field is required.</div>
+                  <div *ngIf="registerForm.get('username')?.errors?.['pattern']">Only letters, numbers and underscores allowed.</div>
+                </div>
+              </div>
+  
+                         <!-- Password and Confirm Password -->
+                         <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-white">Password</label>
+                                <input type="password" id="password" formControlName="password" placeholder="Enter a strong password"
+                                    class="input-field" />
+                                <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+                                    class="text-red-500 text-sm mt-1">
+                                    <div *ngIf="registerForm.get('password')?.errors?.['required']">This field is required.</div>
+                                    <div *ngIf="registerForm.get('password')?.errors?.['minlength']">Minimum 6 characters.</div>
+                                    <div *ngIf="registerForm.get('password')?.errors?.['pattern']">
+                                        Must include a capital letter, a number, and a special character.
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="passwordRepeat" class="block text-sm font-medium text-gray-700 dark:text-white">Confirm Password</label>
+                                <input type="password" id="passwordRepeat" formControlName="passwordRepeat" placeholder="Re-enter password"
+                                    class="input-field" />
+                                <div *ngIf="registerForm.hasError('passwordsMismatch') && registerForm.get('passwordRepeat')?.touched"
+                                    class="text-red-500 text-sm mt-1">
+                                    Passwords do not match.
+                                </div>
+                            </div>
+                        </div>
+                        <!-- First Name and Last Name -->
+                        <div class="grid grid-cols-2 gap-4">
+                            
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium text-gray-700 dark:text-white">First Name</label>
+                                <input type="text" id="firstName" formControlName="firstName" placeholder="Enter your first name"
+                                    class="input-field" />
+                                <div *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid"
+                                    class="text-red-500 text-sm mt-1">
+                                    <div *ngIf="registerForm.get('firstName')?.errors?.['required']">This field is required.</div>
+                                    <div *ngIf="registerForm.get('firstName')?.errors?.['pattern']">Only letters are allowed.</div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-white">Last Name</label>
+                                <input type="text" id="lastName" formControlName="lastName" placeholder="Enter your last name"
+                                    class="input-field" />
+                                <div *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid"
+                                    class="text-red-500 text-sm mt-1">
+                                    <div *ngIf="registerForm.get('lastName')?.errors?.['required']">This field is required.</div>
+                                    <div *ngIf="registerForm.get('lastName')?.errors?.['pattern']">Only letters are allowed.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Email and Address -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-white">Email</label>
+                                <input type="email" id="email" formControlName="email" placeholder="example@mail.com"
+                                    class="input-field" />
+                                <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+                                    class="text-red-500 text-sm mt-1">
+                                    <div *ngIf="registerForm.get('email')?.errors?.['required']">This field is required.</div>
+                                    <div *ngIf="registerForm.get('email')?.errors?.['email']">Invalid email format.</div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="address" class="block text-sm font-medium text-gray-700 dark:text-white">Address</label>
+                                <input type="text" id="address" formControlName="address" placeholder="Full address"
+                                    class="input-field" />
+                                <div *ngIf="registerForm.get('address')?.touched && registerForm.get('address')?.invalid"
+                                    class="text-red-500 text-sm mt-1">
+                                    <div *ngIf="registerForm.get('address')?.errors?.['required']">This field is required.</div>
+                                    <div *ngIf="registerForm.get('address')?.errors?.['pattern']">Invalid address format.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phone and Birthday -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-white">Phone</label>
+                                <input type="text" id="phone" formControlName="phone" maxlength="8" placeholder="e.g. 20234567"
+                                    class="input-field" (input)="onPhoneInput($event)" />
+                                <div *ngIf="registerForm.get('phone')?.touched && registerForm.get('phone')?.invalid"
+                                    class="text-red-500 text-sm mt-1">
+                                    <div *ngIf="registerForm.get('phone')?.errors?.['required']">This field is required.</div>
+                                    <div *ngIf="registerForm.get('phone')?.errors?.['pattern']">Invalid phone number.</div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="birthday" class="block text-sm font-medium text-gray-700 dark:text-white">Birthday</label>
+                                <input type="date" id="birthday" formControlName="birthday" class="input-field" />
+                                <div *ngIf="registerForm.get('birthday')?.touched && registerForm.get('birthday')?.invalid"
+                                    class="text-red-500 text-sm mt-1">
+                                    <div *ngIf="registerForm.get('birthday')?.errors?.['required']">This field i required.</div>
+                                    <div *ngIf="registerForm.get('birthday')?.errors?.['ageTooYoung']">You must be at least 12 years old.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+
+                        <!-- Role -->
+                        <div *ngIf="availableRoles.length > 0">
+                            <label for="role" class="block text-sm font-medium text-gray-700 dark:text-white">Role</label>
+                            <select id="role" formControlName="role" class="input-field">
+                                <option *ngFor="let r of availableRoles" [value]="r.id">{{ r.name }}</option>
+                            </select>
+                        </div>
+
+                        <!-- Enabled -->
+                        <div class="flex items-center space-x-2">
+                            <input id="enabled" type="checkbox" formControlName="enabled" class="w-4 h-4 text-blue-600 rounded" />
+                            <label for="enabled" class="text-sm text-gray-700 dark:text-white">Activate account</label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit"
+                            class="w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50"
+                            [disabled]="registerForm.invalid">
+                            Create Account
+                        </button>
+
+                        <!-- Login Link -->
+                        <p class="text-center text-sm text-gray-600 dark:text-gray-400">
+                            Already registered?
+                            <a [routerLink]="['/auth/login']" class="text-blue-600 hover:underline dark:text-blue-400">
+                                Log in
+                            </a>
+                        </p>
+                    </form>
+                </div>
+            </section>
+
+            <style>
+                .input-field {
+                    @apply mt-1 w-full p-3 text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+                }
+            </style>
+        </div>
+    </div>
+</section>
