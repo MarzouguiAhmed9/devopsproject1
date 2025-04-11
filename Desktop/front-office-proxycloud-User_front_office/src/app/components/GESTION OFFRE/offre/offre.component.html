@@ -1,2 +1,36 @@
-In the ever-evolving landscape of technology, it's fascinating to observe how advancements in software development, artificial intelligence, and machine learning are transforming various industries at an accelerated pace. These innovations, once limited to research labs and highly specialized applications, have now made their way into the everyday lives of people, often in ways that are not immediately visible but profoundly impactful. Take, for instance, the evolution of cloud computing, which has made it possible for businesses to scale and operate in a much more efficient and cost-effective manner. The ability to store and process vast amounts of data on remote servers instead of relying on local infrastructure has democratized access to powerful tools, enabling even small startups to leverage sophisticated technologies that were once the domain of large corporations. Similarly, the rise of artificial intelligence and machine learning has begun to reshape industries ranging from healthcare to finance, making systems smarter and more capable of handling complex tasks that were previously thought to require human intervention. Yet, with all these technological leaps, there's a need for a careful balancing act between progress and responsibility. As we move forward, it’s crucial to ensure that ethical considerations, data privacy, and security remain at the forefront of these innovations. The future promises an exciting array of possibilities, but it is also imperative that we navigate these changes thoughtfully, ensuring that technology serves to enhance and improve the human experience rather than replace it.
+<!-- Application Form (Modal) in Card Format -->
+<div *ngIf="showForm" class="application-form-card">
+  <div class="application-form">
+    <h2>Apply for the Offer</h2>
+    <form [formGroup]="applicationForm" (ngSubmit)="submitApplication()">
+      <div>
+        <label for="cvRoulant">CV:</label>
+        <input id="cvRoulant" formControlName="cvRoulant" type="text" placeholder="Enter CV name or link">
+      </div>
 
+      <div>
+        <label for="motivatedLetter">Motivated Letter:</label>
+        <textarea id="motivatedLetter" formControlName="motivatedLetter" placeholder="Enter your motivation letter"></textarea>
+      </div>
+
+      <div>
+        <label for="username">Username:</label>
+        <input id="username" formControlName="username" type="text" placeholder="Enter your username">
+      </div>
+
+      <div>
+        <button type="submit" [disabled]="applicationForm.invalid">Apply</button>
+        <button type="button" (click)="cancelApplication()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- List of Offers in Card Layout -->
+<div class="offres-container">
+  <div *ngFor="let offer of applications" class="offer-card">
+    <h3 class="offer-title">{{ offer.title }}</h3>
+    <p class="offer-description">{{ offer.description }}</p>
+    <button class="applique-button" (click)="openApplicationForm(offer)">Apply</button>
+  </div>
+</div>

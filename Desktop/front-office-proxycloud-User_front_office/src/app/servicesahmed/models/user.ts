@@ -1,0 +1,29 @@
+/* tslint:disable */
+/* eslint-disable */
+import { Application } from '../models/application';
+import { Cv } from '../models/cv';
+import { GrantedAuthority } from '../models/granted-authority';
+import { Offre } from '../models/offre';
+import { Role } from '../models/role';
+export interface User {
+  accountLocked?: boolean;
+  accountNonExpired?: boolean;
+  accountNonLocked?: boolean;
+  address?: string;
+  applications?: Array<Application>;
+  authorities?: Array<GrantedAuthority>;
+  birthday?: string;
+  credentialsNonExpired?: boolean;
+  cv?: Cv;
+  email?: string;
+  enabled?: boolean;
+  firstName?: string;
+  id?: number;
+  lastName?: string;
+  name?: string;
+  offres?: Array<Offre>;
+  password?: string;
+  phone?: string;
+  role?: Role;
+  username?: string;
+}
