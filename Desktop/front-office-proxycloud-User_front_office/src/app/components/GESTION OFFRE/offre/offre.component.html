@@ -1,47 +1,9 @@
-<!-- Application Form (Modal) in Card Format -->
-<div *ngIf="showForm" class="application-form-card">
-  <div class="application-form">
-    <h2>Apply for the Offer</h2>
-    <form [formGroup]="applicationForm" (ngSubmit)="submitApplication()">
-      <div>
-        <label >CV:</label>
-        <!-- Display the CV download link if CV exists -->
-        <ng-container *ngIf="cv">
-          <a [href]="'http://localhost:8089/Projetback/cv/download/' + cv.id" target="_blank">
-            Download CV
-          </a>
-        </ng-container>
-        <ng-container *ngIf="!cv">
-          <p>No CV available</p>
-        </ng-container>
-      </div>
-
-      <div>
-        <label for="motivatedLetter">Motivated Letter:</label>
-        <textarea id="motivatedLetter" formControlName="motivatedLetter" placeholder="Enter your motivation letter"></textarea>
-      </div>
-
-      <div>
-        <label for="username">Username:</label>
-        <input id="username" formControlName="username" type="text" placeholder="Enter your username">
-      </div>
-
-      <div>
-        <button type="submit" (click)="submitApplication()" >Apply offer</button>
-        <button type="button" (click)="cancelApplication()">Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- List of Offers in Card Layout -->
-<div class="min-h-screen flex flex-col p-8 sm:p-16 md:p-24 justify-center bg-white">
+<!-- Offers List Section -->
+<div *ngIf="!showApplicationForm" class="min-h-screen flex flex-col p-8 sm:p-16 md:p-24 justify-center bg-white">
   <div data-theme="teal" class="mx-auto max-w-6xl">
     <section class="font-sans text-black">
 
-      <div *ngFor="let offer of applications"
-           class="lg:grid lg:grid-cols-2 lg:gap-8 mb-12">
-
+      <div *ngFor="let offer of applications" class="lg:grid lg:grid-cols-2 lg:gap-8 mb-12">
         <!-- Left Column: Image -->
         <div class="flex-shrink-0 self-stretch mb-6 lg:mb-0">
           <div class="h-full">
@@ -57,32 +19,39 @@
           </div>
         </div>
 
-        <!-- Right Column: Text Content -->
+        <!-- Right Column: Offer Content -->
         <div class="p-6 bg-grey rounded-2xl shadow-lg flex flex-col justify-between">
           <div class="leading-relaxed">
             <h2 class="text-3xl font-bold text-gray-900">{{ offer.title }}</h2>
             <p class="mt-4 text-gray-800">{{ offer.description }}</p>
+
+            <!-- Skills -->
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span *ngFor="let skill of (offer.skills ? offer.skills.split(',') : [])"
+                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-pink-100 text-pink-700 shadow-sm">
+                {{ skill.trim() }}
+              </span>
+            </div>
+
             <p class="mt-4 text-sm text-gray-600">
-              <!-- Make sure the date is parsed correctly -->
               Published on: {{ offer.createdAt | date:'mediumDate' }}
             </p>
           </div>
 
-          <!-- Apply Button -->
           <button
             class="mt-6 bg-pink-600 text-white py-2 px-5 rounded-md shadow-md hover:bg-pink-700 transition"
             (click)="openApplicationForm(offer)">
             Apply
           </button>
         </div>
-
       </div>
 
     </section>
   </div>
 </div>
 
-
-
-
-
+<!-- Application Form Section -->
+<app-application *ngIf="showApplicationForm"
+                 [selectedOffer]="selectedOffer"
+                 [cv]="cv">
+</app-application>

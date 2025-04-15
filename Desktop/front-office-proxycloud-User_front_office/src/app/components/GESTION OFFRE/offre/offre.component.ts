@@ -11,52 +11,52 @@ import { TokenService } from "../../../servicesahmed/token/token.service";
 @Component({
   selector: 'app-offre',
   templateUrl: './offre.component.html',
-  styleUrls: ['./offre.component.css'] // optional, if you have styles
+  styleUrls: ['./offre.component.css']
 })
 export class OffreComponent implements OnInit {
 
   applications: Offre[] = [];
-  cv: Cv | null = null;  // Change to hold a single CV instead of an array
-
+  cv: Cv | null = null;
   isLoading: boolean = false;
   errorMessage: string = '';
-  offre: Offre = { skills: '', description: '', title: '' };
-  isEditing: boolean = false;
-  selectedOffreId: number | null = null;
 
-  // New properties for form
-  showForm: boolean = false; // Toggle visibility of form
-  selectedOffre: Offre | null = null; // Store selected offer for application
-  applicationForm: FormGroup; // FormGroup to handle application data
+  showForm: boolean = false;
+  selectedOffer: Offre | null = null;
+  applicationForm: FormGroup;
 
   constructor(
     private offreservice: OffreControllerService,
     private cvservice: CvControllerService,
     private applicationservice: ApplicationControllerService,
-    private fb: FormBuilder, // Injecting FormBuilder for form handling
-    private tokenService: TokenService // Inject TokenService to get the token
+    private fb: FormBuilder,
+    private tokenService: TokenService
   ) {
-    // Initialize the form
     this.applicationForm = this.fb.group({
-      cvRoulant: ['', Validators.required], // CV (file or string)
-      motivatedLetter: ['', Validators.required], // Motivational letter
-      username: ['', Validators.required], // Username
+      cvRoulant: ['', Validators.required],
+      motivatedLetter: ['', Validators.required],
+      username: ['', Validators.required]
     });
+  }
+  showApplicationForm: boolean = false;
+
+  openApplicationForm(offer: Offre): void {
+    this.selectedOffer = offer;
+    this.showApplicationForm = true;
   }
 
   ngOnInit(): void {
-    this.loadApplications();  // Load applications initially
-    this.loadCv();  // Load CV based on username
+    this.loadApplications();
+    this.loadCv();
   }
 
   private loadApplications(): void {
     this.isLoading = true;
     this.offreservice.getAllOffres().subscribe({
-      next: (data: Offre[]) => {  // Ensure it's typed as Offre[]
+      next: (data: Offre[]) => {
         this.applications = data;
         this.isLoading = false;
       },
-      error: (error) => {
+      error: () => {
         this.errorMessage = 'Failed to load offres.';
         this.isLoading = false;
       }
@@ -65,21 +65,19 @@ export class OffreComponent implements OnInit {
 
   private loadCv(): void {
     this.isLoading = true;
-
     const token = this.tokenService.getToken();
 
     if (token) {
       const username = this.decodeJwt(token).sub;
-      console.log(username);
+      console.log("Loaded username:", username);
 
-      // Call the service method with the correct parameters
       this.cvservice.getCvByUsername({ username }).subscribe({
         next: (data: Cv) => {
           this.cv = data;
-          console.log(this.cv);
+          console.log("CV loaded:", this.cv);
           this.isLoading = false;
         },
-        error: (error) => {
+        error: () => {
           this.errorMessage = 'Failed to load CV.';
           this.isLoading = false;
         }
@@ -90,75 +88,59 @@ export class OffreComponent implements OnInit {
     }
   }
 
-  // Extract the username from the token and log it to the console
-  private getUsernameFromToken(): void {
-    const token = this.tokenService.getToken();  // Get the token from localStorage
-    if (token) {
-      const username = this.decodeJwt(token);  // Decode the token to get the username
-      console.log('Username from token:', username.sub);  // Assuming 'sub' is the username field
-    } else {
-      console.log('No token found');
-    }
-  }
-
-  // Decode the JWT token and return its payload
   private decodeJwt(token: string): any {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace('-', '+').replace('_', '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
+    const jsonPayload = decodeURIComponent(
+      atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join('')
+    );
     return JSON.parse(jsonPayload);
   }
 
-  // Method to show the form for the selected offer
-  openApplicationForm(offre: Offre): void {
-    this.selectedOffre = offre; // Store selected offer
-    console.log(this.selectedOffre.id + "ee");
-    this.showForm = true; // Show the form
-  }
 
-  // Method to submit the application form
+
   submitApplication(): void {
-    const username = this.applicationForm.value.username;
-    const motivatedLetter = this.applicationForm.value.motivatedLetter;
-
-    if (!username || !motivatedLetter) {
-      alert("Please provide both your username and motivation letter.");
+    if (!this.applicationForm.valid) {
+      alert("Please complete all fields.");
       return;
     }
 
-    if (!this.selectedOffre || !this.selectedOffre.id) {
-      alert("No offer selected.");
+    if (!this.selectedOffer || typeof this.selectedOffer.id !== 'number') {
+      alert("No offer selected or invalid offer ID.");
+      return;
+    }
+
+    if (!this.cv || typeof this.cv.id !== 'number') {
+      alert("Your CV is not loaded or missing ID.");
       return;
     }
 
     const application: Application = {
-      motivatedlettre: motivatedLetter,
-      cv: { id: this.cv!.id },
-      username: username,
+      motivatedlettre: this.applicationForm.value.motivatedLetter,
+      cv: { id: this.cv.id }, // Now TypeScript knows it's number
+      username: this.applicationForm.value.username,
       status: 'PENDING',
-      offre: { id: this.selectedOffre!.id } // Only the ID is needed
+      offre: { id: this.selectedOffer.id }  // Safe, already checked above
     };
 
-    console.log("Application ID: " + this.selectedOffre.id);
     this.applicationservice.addapplication({ body: application }).subscribe({
       next: (response) => {
-        alert("Application added successfully!");
-        console.log("Application submitted:", response);
-        this.cancelApplication(); // Reset form
+        alert("Application submitted successfully!");
+        console.log("Submitted application:", response);
+        this.cancelApplication();
       },
       error: (error) => {
-        console.error("Failed to submit application:", error);
-        alert("An error occurred while submitting the application.");
+        console.error("Error submitting application:", error);
+        alert("Failed to submit application.");
       }
     });
   }
 
-  // Method to cancel the application form
+
   cancelApplication(): void {
-    this.showForm = false; // Close the form without submission
-    this.applicationForm.reset(); // Reset the form
+    this.selectedOffer = null;
+    this.showForm = false;
   }
 }

@@ -5,12 +5,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { OffreComponent } from './offre/offre.component';
 import { OffreRoutingModule} from './gestionoffre-routing.module';
-import {CvgeneratorComponent} from "./cvgenerator/cvgenerator.component"; // ✅ Import your routing
+import {CvgeneratorComponent} from "./cvgenerator/cvgenerator.component";
+import {ApplicationComponent} from "./application/application.component"; // ✅ Import your routing
 
 @NgModule({
   declarations: [
     OffreComponent,
-    CvgeneratorComponent
+    CvgeneratorComponent,
+    ApplicationComponent
   ],
   imports: [
     CommonModule,
