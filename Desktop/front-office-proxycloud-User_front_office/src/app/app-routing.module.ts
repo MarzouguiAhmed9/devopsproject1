@@ -13,6 +13,10 @@ const routes: Routes = [
   {
     path: 'offre',
     loadChildren: () => import('./components/GESTION OFFRE/gestionoffre.module').then(m => m.GestionoffreModule)
+  },
+  {
+    path: 'cvgen',
+    loadChildren: () => import('./components/GESTION OFFRE/gestionoffre.module').then(m => m.GestionoffreModule)
   }
 
 ];

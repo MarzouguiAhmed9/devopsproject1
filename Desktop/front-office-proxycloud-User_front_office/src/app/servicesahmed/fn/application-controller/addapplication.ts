@@ -9,23 +9,24 @@ import { RequestBuilder } from '../../request-builder';
 import { Application } from '../../models/application';
 
 export interface Addapplication$Params {
-      body: Application
+    body: Application
 }
 
 export function addapplication(http: HttpClient, rootUrl: string, params: Addapplication$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, addapplication.PATH, 'post');
-  if (params) {
-    rb.body(params.body, 'application/json');
-  }
+    const rb = new RequestBuilder(rootUrl, addapplication.PATH, 'post');
+    if (params) {
+        rb.body(params.body, 'application/json');
+    }
 
-  return http.request(
-    rb.build({ responseType: 'blob', accept: '*/*', context })
-  ).pipe(
-    filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
-    map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
-    })
-  );
+    return http.request(
+        rb.build({ responseType: 'json', accept: '*/*', context })  // Ensure we expect 'json' response type
+    ).pipe(
+        filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
+        map((r: HttpResponse<any>) => {
+            // Assuming the backend sends the created application ID in the response body.
+            return (r as HttpResponse<any>).clone({ body: Number((r.body as any).id) }) as StrictHttpResponse<number>;
+        })
+    );
 }
 
 addapplication.PATH = '/application/add';

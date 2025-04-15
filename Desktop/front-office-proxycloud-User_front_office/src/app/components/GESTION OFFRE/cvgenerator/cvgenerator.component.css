@@ -1,0 +1,148 @@
+.form-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+  color: #333;
+}
+
+.cv-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button.submit-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.skill-card {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.skill-card:hover {
+  background-color: #f9a8d4;
+  border-color: #ec4899;
+}
+.skill-card {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.skill-card:hover {
+  background-color: #f9a8d4;
+  border-color: #ec4899;
+}
+
+.skill-label {
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
+/* Add to cvgenerator.component.css */
+button {
+  transition: background-color 0.3s ease;
+}
+
+button.bg-pink-100:hover {
+  background-color: #fbb6ce;
+}
+
+button.bg-gray-100:hover {
+  background-color: #f0f0f0;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.5);
+}
+
+button:active {
+  background-color: #ec4899;
+}
+
+input[type="checkbox"]:checked + .skill-label {
+  background-color: #ec4899;
+  color: white;
+}
+
+.skill-label.selected {
+  background-color: #ec4899;
+  color: white;
+  border: 1px solid #ec4899;
+}
+
+.skill-label {
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
+
+input[type="checkbox"]:checked + .skill-label {
+  background-color: #ec4899;
+  color: white;
+}
+
+button.submit-btn:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

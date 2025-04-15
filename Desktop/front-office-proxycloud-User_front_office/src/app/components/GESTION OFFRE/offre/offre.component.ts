@@ -30,11 +30,11 @@ export class OffreComponent implements OnInit {
   applicationForm: FormGroup; // FormGroup to handle application data
 
   constructor(
-      private offreservice: OffreControllerService,
-      private cvservice: CvControllerService,
-      private applicationservice: ApplicationControllerService,
-      private fb: FormBuilder, // Injecting FormBuilder for form handling
-      private tokenService: TokenService // Inject TokenService to get the token
+    private offreservice: OffreControllerService,
+    private cvservice: CvControllerService,
+    private applicationservice: ApplicationControllerService,
+    private fb: FormBuilder, // Injecting FormBuilder for form handling
+    private tokenService: TokenService // Inject TokenService to get the token
   ) {
     // Initialize the form
     this.applicationForm = this.fb.group({
@@ -66,17 +66,17 @@ export class OffreComponent implements OnInit {
   private loadCv(): void {
     this.isLoading = true;
 
-    // Get the token from the TokenService
-    const token = this.tokenService.getToken();  // Assuming TokenService is imported and available
+    const token = this.tokenService.getToken();
 
     if (token) {
-      // Decode the token and extract the username
-      const username = this.decodeJwt(token).sub;  // Assuming 'sub' is the username field in the token
-console.log(username)
-      // Now use the extracted username to load the CV
-      this.cvservice.getCvByUsername(username).subscribe({
-        next: (data: Cv) => {  // Expect a single Cv object now
-          this.cv = data;  // Store the single CV
+      const username = this.decodeJwt(token).sub;
+      console.log(username);
+
+      // Call the service method with the correct parameters
+      this.cvservice.getCvByUsername({ username }).subscribe({
+        next: (data: Cv) => {
+          this.cv = data;
+          console.log(this.cv);
           this.isLoading = false;
         },
         error: (error) => {
@@ -115,32 +115,42 @@ console.log(username)
   // Method to show the form for the selected offer
   openApplicationForm(offre: Offre): void {
     this.selectedOffre = offre; // Store selected offer
+    console.log(this.selectedOffre.id + "ee");
     this.showForm = true; // Show the form
   }
 
   // Method to submit the application form
   submitApplication(): void {
-    if (this.applicationForm.invalid) {
-      alert("Please fill in all required fields.");
+    const username = this.applicationForm.value.username;
+    const motivatedLetter = this.applicationForm.value.motivatedLetter;
+
+    if (!username || !motivatedLetter) {
+      alert("Please provide both your username and motivation letter.");
+      return;
+    }
+
+    if (!this.selectedOffre || !this.selectedOffre.id) {
+      alert("No offer selected.");
       return;
     }
 
     const application: Application = {
-      motivatedlettre: this.applicationForm.value.motivatedLetter,  // from form input
-      cv: { name: this.applicationForm.value.cvRoulant },  // Assuming it's a string or object
-      username: this.applicationForm.value.username,  // Username or student info
-      status: 'PENDING'                      // Default status
+      motivatedlettre: motivatedLetter,
+      cv: { id: this.cv!.id },
+      username: username,
+      status: 'PENDING',
+      offre: { id: this.selectedOffre!.id } // Only the ID is needed
     };
 
-    // Make the request to submit the application
+    console.log("Application ID: " + this.selectedOffre.id);
     this.applicationservice.addapplication({ body: application }).subscribe({
       next: (response) => {
         alert("Application added successfully!");
-        console.log("Application added successfully:", response);
-        this.cancelApplication(); // Reset form after submission
+        console.log("Application submitted:", response);
+        this.cancelApplication(); // Reset form
       },
       error: (error) => {
-        console.error("Failed to add application:", error);
+        console.error("Failed to submit application:", error);
         alert("An error occurred while submitting the application.");
       }
     });

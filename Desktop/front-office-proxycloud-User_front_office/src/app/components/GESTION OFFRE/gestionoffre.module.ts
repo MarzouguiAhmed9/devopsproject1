@@ -4,11 +4,13 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { OffreComponent } from './offre/offre.component';
-import { OffreRoutingModule} from './gestionoffre-routing.module'; // ✅ Import your routing
+import { OffreRoutingModule} from './gestionoffre-routing.module';
+import {CvgeneratorComponent} from "./cvgenerator/cvgenerator.component"; // ✅ Import your routing
 
 @NgModule({
   declarations: [
-    OffreComponent
+    OffreComponent,
+    CvgeneratorComponent
   ],
   imports: [
     CommonModule,

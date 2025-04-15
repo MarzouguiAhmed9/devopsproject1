@@ -15,6 +15,7 @@ import { downloadCv } from '../fn/cv-controller/download-cv';
 import { DownloadCv$Params } from '../fn/cv-controller/download-cv';
 import { getCvByUsername } from '../fn/cv-controller/get-cv-by-username';
 import { GetCvByUsername$Params } from '../fn/cv-controller/get-cv-by-username';
+import {Cv} from "../models/cv";
 
 @Injectable({ providedIn: 'root' })
 export class CvControllerService extends BaseService {
@@ -67,12 +68,28 @@ export class CvControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getCvByUsername(params: GetCvByUsername$Params, context?: HttpContext): Observable<{
-}> {
+  getCvByUsername(params: GetCvByUsername$Params, context?: HttpContext): Observable<Cv> {
     return this.getCvByUsername$Response(params, context).pipe(
-      map((r: StrictHttpResponse<{
-}>): {
-} => r.body)
+      map((r: StrictHttpResponse<Cv>): Cv => r.body)
+    );
+  }
+
+  private apiUrl = 'http://localhost:8089/Projetback/cv';  // Adjust if needed
+
+
+  // Upload photo: POST /cv/uploadPhoto/{id}
+  uploadCvPhoto(cvId: number, formData: FormData): Observable<{ photoUrl: string }> {
+    return this.http.post<{ photoUrl: string }>(
+        `${this.apiUrl}/uploadPhoto/${cvId}`,
+        formData
+    );
+  }
+
+  // Update CV photo URL in DB: PUT /cv/updatePhotoUrl
+  updateCvPhotoUrl(updateData: { id: number; photoUrl: string }): Observable<any> {
+    return this.http.put(
+        `${this.apiUrl}/updatePhotoUrl`,
+        updateData
     );
   }
 
